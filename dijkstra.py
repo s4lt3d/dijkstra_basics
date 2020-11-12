@@ -97,7 +97,7 @@ def get_row_col(cell, shape):
 
 print("Maze")
 grid = np.zeros(shape=(50,50), dtype=int)
-#print_grid(grid)
+print_grid(grid)
 
 graph = build_np_graph(grid)
 
@@ -112,4 +112,4 @@ for cell in path:
     position = get_row_col(cell, grid.shape)
     draw_grid[position] = 2
     
-#print_grid(draw_grid)
+print_grid(draw_grid)
