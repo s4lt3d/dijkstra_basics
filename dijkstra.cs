@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace PathFinding
 {
@@ -12,7 +11,7 @@ namespace PathFinding
             var grid = path.BlankGrid(5, 5);
             var graph = path.BuildGraphFromGrid(grid);
             path.PrintGraph(graph);
-            path.Dijkstra(graph, 0, 4);
+            List<int> solution = path.Dijkstra(graph, path.GetCell(0, 0, 5, 5), path.GetCell(4, 4, 5, 5));
 
             Console.ReadLine();
         }
@@ -129,55 +128,25 @@ namespace PathFinding
             var currentNode = goal;
             while (currentNode != start)
             {
-
+                try
+                {
+                    path.Insert(0, currentNode);
+                    currentNode = predecessor[currentNode];
+                }
+                catch
+                {
+                    path = new List<int>();
+                    break;
+                }
             }
 
-            Debugger.Break();
+            if (path.Count > 0)
+            {
+                path.Insert(0, start);
+            }
 
+            return path;
 
-            /*
-    shortest_distance = {}
-    predecessor = {}
-    unseenNodes = graph
-    infinity = 100
-    path = []
-
-    for node in unseenNodes:
-        shortest_distance[node] = infinity
-
-    shortest_distance[start] = 0
-
-    while unseenNodes:
-        minNode = None
-        for node in unseenNodes:
-            if minNode is None:
-                minNode = node
-            elif shortest_distance[node] < shortest_distance[minNode]:
-                minNode = node
-
-        for childNode, weight in graph[minNode].items():
-            if weight + shortest_distance[minNode] < shortest_distance[childNode]:
-                shortest_distance[childNode] = weight + shortest_distance[minNode]
-                predecessor[childNode] = minNode
-
-        unseenNodes.pop(minNode)
-
-    currentNode = goal
-    while currentNode != start:
-        try:
-            path.insert(0, currentNode)
-            currentNode = predecessor[currentNode]
-        except:
-            path = None
-            break
-
-    if path is not None:
-        path.insert(0, start)
-
-    return path
-            */
-
-            return new List<int>();
         }
 
         public int GetCell(int row, int column, int width, int height)
@@ -190,11 +159,6 @@ namespace PathFinding
             int row = cell / width;
             int col = cell % width;
             return (row, col);
-        }
-
-        public void PrintGrid(float[][] grid)
-        {
-
         }
 
         public void PrintGraph(Dictionary<int, List<int[]>> graph)
